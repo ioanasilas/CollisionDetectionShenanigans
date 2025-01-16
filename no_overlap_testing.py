@@ -6,7 +6,7 @@ from shared_data import shapes
 
 xPixels = 1024
 yPixels = 618
-pointsTesting = 8
+pointsTesting = 50
 density = 1
 
 # Nonoverlapping points generation
