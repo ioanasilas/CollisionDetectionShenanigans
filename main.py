@@ -5,7 +5,7 @@ import math
 import random
 import time
 from random_testing import circleCircleRandom, polygonPolygonRandom, circleLineRandom, aabbRandom, lineLineRandom
-from no_overlap_testing import circleCircleNonOverlap, aabbNoOverlap
+from no_overlap_testing import circleLineNoOverlap, polygonPolygonNoOverlap, lineLineNoOverlap, circleCircleNonOverlap, aabbNoOverlap
 from shared_data import shapes, times
 from csv_saves import *
 
@@ -41,7 +41,7 @@ while running and total_runs < max_runs:
     # aabbRandom()
     # circleCircleRandom()
 
-    circleCircleNonOverlap()
+    circleLineNoOverlap()
     # aabbNoOverlap()
 
     for event in pygame.event.get():
@@ -51,7 +51,7 @@ while running and total_runs < max_runs:
         if event.type == pygame.KEYDOWN and (48 <= event.key <= 57):
             outline = int(chr(event.key))
     
-    # timing just actual sorting, you're cool yousef \o/
+    # timing just actual sorting, you're cool ioana \o/
     print("Run: ", total_runs + 1)
     startTime = time.time()
     for i in range(len(shapes)):
