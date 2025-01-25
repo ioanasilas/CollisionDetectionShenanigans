@@ -17,40 +17,79 @@ density = 1
 
 # Random points generation
 
-def circleCircleFullOverlap():
+def circleCircleFullOverlap(n = 1):
     shapesTesting = pointsTesting
-    maxRadius = int(min(xPixels, yPixels)/2)
-    # hR = int(maxRadius/2)
+        
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    
+    grid = []
+    
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+            
+    maxRadius = int(min(gridX, gridY)/2)
 
     for i in range(0, shapesTesting):
+        index = i % n
         randomRadius = random.randint(1, maxRadius)
-        randomPoint = Point(int(xPixels/2), int(yPixels/2))
+        randomPoint = Point(grid[index].x, grid[index].y)
 
         newCircle = Circle(randomPoint, randomRadius)
         shapes.append(newCircle)
 
-def aabbFullOverlap():
+def aabbFullOverlap(n = 1):
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hX = round((xPixels/cols)/2)
+    hY = round((yPixels/rows)/2)
+    
+    grid = []
+    
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+    
     shapesTesting = int(pointsTesting/2)
-    avgSize = int(math.sqrt((density * (xPixels * yPixels))/(shapesTesting)))
-    hS = int(avgSize/2)
-    sizeRange = avgSize + hS
 
     for i in range(shapesTesting):
-        randomP1 = Point(random.randint(0, int(xPixels/2) - hS), random.randint(0, int(yPixels/2) - hS))
-        randomP2 = Point(random.randint(int(xPixels/2) + hS, xPixels), random.randint(int(yPixels/2) + hS, yPixels))
+        index = i % n
+        randomP1 = Point(random.randint(int(grid[index].x) - hX, int(grid[index].x)), random.randint(int(grid[index].y) - hY, int(grid[index].y)))
+        randomP2 = Point(random.randint(int(grid[index].x), int(grid[index].x) + hX), random.randint(int(grid[index].y), int(grid[index].y) + hY))
 
         newBox = Rectangle(randomP1, randomP2)
         shapes.append(newBox)
 
-def lineLineFullOverlap():
+def lineLineFullOverlap(n = 1):
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hX = round((xPixels/cols)/2)
+    hY = round((yPixels/rows)/2)
+    
+    grid = []
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+    
     shapesTesting = int(pointsTesting / 2)
-    avgLength = int(math.sqrt((density * (xPixels * yPixels)) / shapesTesting))
-    hL = int(avgLength/2)
 
     for i in range(shapesTesting):
-        # randomP1 = Point(500,500)
-        randomP1 = Point(random.randint(0, xPixels), random.randint(0, yPixels))
-        center = Point(int(xPixels/2), int(yPixels/2))
+        index = i % n
+        randomP1 = Point(random.randint(int(grid[index].x) - hX, int(grid[index].x) + hX), random.randint(int(grid[index].y) - hY, int(grid[index].y) + hY))
+        center = grid[index]
         
         dx = center.x - randomP1.x 
         dy = center.y - randomP1.y
@@ -62,7 +101,20 @@ def lineLineFullOverlap():
         newLine = Line(randomP1, randomP2)
         shapes.append(newLine)
 
-def polygonPolygonFullOverlap():
+def polygonPolygonFullOverlap(n = 1):
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hS = round(min(gridX, gridY)/2)
+    
+    grid = []
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+            
     points_used = 0
     shapesTesting = 0
     maxEdges = 10
@@ -90,15 +142,16 @@ def polygonPolygonFullOverlap():
     # print(shapesTesting, points_used)
     # each poly has between 3 and 10 edges
     # get how many polys we will get
-    hS = int(min(xPixels/2, yPixels/2))
     # leftover_points = pointsTesting % num_edges
 
     polygons = []
 
+    i = 0
     for edgesInPolygon in edgeNumArr:
         # we can use Valtr algorithm
-        randomPosX = int(xPixels/2)
-        randomPosY = int(yPixels/2)
+        index = i % n
+        randomPosX = int(grid[index].x)
+        randomPosY = int(grid[index].y)
         X = random.sample(range(randomPosX - hS, randomPosX+hS), edgesInPolygon) 
         Y = random.sample(range(randomPosY - hS, randomPosY+hS), edgesInPolygon) 
 
@@ -176,6 +229,7 @@ def polygonPolygonFullOverlap():
         translated_polygon = Polygon([Point(p.x + xShift, p.y + yShift) for p in polygon_points])
 
         polygons.append(translated_polygon)
+        i += 1
 
     # print(polygons)
     # print(num_edges)
@@ -185,24 +239,38 @@ def polygonPolygonFullOverlap():
     shapes.extend(polygons)
 
 
-def circleLineFullOverlap():
+def circleLineFullOverlap(n = 1):
     circlesTesting = math.ceil(pointsTesting/3)
     linesTesting = math.floor(pointsTesting/3)
     
-    maxRadius = int(min(xPixels, yPixels)/2)
-    # hR = int(maxRadius/2)
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hX = round((xPixels/cols)/2)
+    hY = round((yPixels/rows)/2)
+    
+    grid = []
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+    
+        maxRadius = int(min(gridX, gridY)/2)
 
     for i in range(circlesTesting):
+        index = i % n
         randomRadius = random.randint(1, maxRadius)
-        randomPoint = Point(int(xPixels/2), int(yPixels/2))
+        randomPoint = Point(grid[index].x, grid[index].y)
 
         newCircle = Circle(randomPoint, randomRadius)
         shapes.append(newCircle)
 
     for i in range(linesTesting):
-        # randomP1 = Point(500,500)
-        randomP1 = Point(random.randint(0, xPixels), random.randint(0, yPixels))
-        center = Point(int(xPixels/2), int(yPixels/2))
+        index = i % n
+        randomP1 = Point(random.randint(int(grid[index].x) - hX, int(grid[index].x) + hX), random.randint(int(grid[index].y) - hY, int(grid[index].y) + hY))
+        center = grid[index]
         
         dx = center.x - randomP1.x 
         dy = center.y - randomP1.y
