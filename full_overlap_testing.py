@@ -1,7 +1,7 @@
 import random
 import math
 from shapes import Point, Polygon, Circle, Line, Rectangle
-from shared_data import shapes
+from shared_data import shapes, pointsTestingDict
 
 # circleCircleRandom()
 # aabbRandom()
@@ -12,7 +12,6 @@ from shared_data import shapes
 
 xPixels = 1024
 yPixels = 618
-pointsTesting = 100
 density = 1
 
 # Random points generation

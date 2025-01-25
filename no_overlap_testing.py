@@ -1,11 +1,10 @@
 import random
 import math
 from shapes import Point, Polygon, Circle, Line, Rectangle
-from shared_data import shapes
+from shared_data import shapes, pointsTestingDict
 
 xPixels = 1024
 yPixels = 618
-pointsTesting = 1000
 density = 1
 
 # Nonoverlapping points generation

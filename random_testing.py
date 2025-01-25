@@ -1,7 +1,7 @@
 import random
 import math
 from shapes import Point, Polygon, Circle, Line, Rectangle
-from shared_data import shapes
+from shared_data import shapes, pointsTestingDict
 
 # circleCircleRandom()
 # aabbRandom()
@@ -12,12 +12,11 @@ from shared_data import shapes
 
 xPixels = 1024
 yPixels = 618
-pointsTesting = 10000
 density = 1
 
 # Random points generation
 
-def circleCircleRandom():
+def circleCircleRandom(pointsTesting):
     shapesTesting = pointsTesting
     avgRadius = int(math.sqrt((density * (xPixels * yPixels))/(math.pi * shapesTesting)))
     hR = int(avgRadius/2)
@@ -29,7 +28,7 @@ def circleCircleRandom():
         newCircle = Circle(randomPoint, randomRadius)
         shapes.append(newCircle)
 
-def aabbRandom():
+def aabbRandom(pointsTesting):
     shapesTesting = int(pointsTesting/2)
     avgSize = int(math.sqrt((density * (xPixels * yPixels))/(shapesTesting)))
     hS = int(avgSize/2)
@@ -42,7 +41,7 @@ def aabbRandom():
         newBox = Rectangle(randomP1, randomP2)
         shapes.append(newBox)
 
-def lineLineRandom():
+def lineLineRandom(pointsTesting):
     shapesTesting = int(pointsTesting / 2)
     avgLength = int(math.sqrt((density * (xPixels * yPixels)) / shapesTesting))
     lengthRange = int(avgLength*2)
@@ -57,7 +56,7 @@ def lineLineRandom():
         newLine = Line(randomP1, randomP2)
         shapes.append(newLine)
 
-def polygonPolygonRandom():
+def polygonPolygonRandom(pointsTesting):
     points_used = 0
     shapesTesting = 0
     maxEdges = 10
@@ -182,7 +181,7 @@ def polygonPolygonRandom():
     shapes.extend(polygons)
 
 
-def circleLineRandom():
+def circleLineRandom(pointsTesting):
     circlesTesting = math.ceil(pointsTesting/3)
     linesTesting = math.floor(pointsTesting/3)
     
@@ -208,3 +207,12 @@ def circleLineRandom():
 
         newLine = Line(randomP1, randomP2)
         shapes.append(newLine)
+
+# dex to map stuff for main call of csv
+test_functions_random = {
+    "polygonPolygonRandom" : polygonPolygonRandom,
+    "circleLineRandom" : circleCircleRandom,
+    "lineLineRandom" : lineLineRandom,
+    "aabbRandom" : aabbRandom,
+    "circleLineRandom" : circleLineRandom
+}
