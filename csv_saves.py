@@ -13,10 +13,18 @@ def save_exec_time_detailed(pointsTesting, algo_name_test_type, times, filename)
     for i, time in enumerate(times):
       writer.writerow([i + 1, time])
 
-def save_exec_time_avg(pointsTesting, algo_name_test_type, averages, filename):
+def save_exec_time_avg(algo_name_test_type, averages, filename):
   with open(filename, mode = 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow([f"Testing {algo_name_test_type}"])
     writer.writerow(["No. points", "Avg. execution time (s)"])
-    for avg_time in averages:
-      writer.writerow([{pointsTesting}, avg_time])
+    for key, avg_time in averages.items():
+      writer.writerow([{key}, avg_time])
+      
+# def save_exec_time_avg_overlap(algo_name_test_type, averages, filename):
+#   with open(filename, mode = 'w', newline='') as file:
+#     writer = csv.writer(file)
+#     writer.writerow([f"Testing {algo_name_test_type}"])
+#     writer.writerow(["No. points", "No. positions" , "Avg. execution time (s)"])
+#     for key, avg_time in averages.items():
+#       writer.writerow([{key}, avg_time])

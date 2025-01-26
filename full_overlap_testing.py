@@ -16,7 +16,7 @@ density = 1
 
 # Random points generation
 
-def circleCircleFullOverlap(n = 1):
+def circleCircleFullOverlap(pointsTesting, n = 1):
     shapesTesting = pointsTesting
         
     cols = math.ceil(math.sqrt(n))
@@ -42,7 +42,7 @@ def circleCircleFullOverlap(n = 1):
         newCircle = Circle(randomPoint, randomRadius)
         shapes.append(newCircle)
 
-def aabbFullOverlap(n = 1):
+def aabbFullOverlap(pointsTesting, n = 1):
     cols = math.ceil(math.sqrt(n))
     rows = math.ceil(n/cols)
     
@@ -68,7 +68,7 @@ def aabbFullOverlap(n = 1):
         newBox = Rectangle(randomP1, randomP2)
         shapes.append(newBox)
 
-def lineLineFullOverlap(n = 1):
+def lineLineFullOverlap(pointsTesting, n = 1):
     cols = math.ceil(math.sqrt(n))
     rows = math.ceil(n/cols)
     
@@ -88,6 +88,12 @@ def lineLineFullOverlap(n = 1):
     for i in range(shapesTesting):
         index = i % n
         randomP1 = Point(random.randint(int(grid[index].x) - hX, int(grid[index].x) + hX), random.randint(int(grid[index].y) - hY, int(grid[index].y) + hY))
+        while True:
+          if abs(grid[index].x - randomP1.x) < 2  and abs(grid[index].y - randomP1.y) < 2:
+            randomP1.x = random.randint(int(grid[index].x) - hX, int(grid[index].x) + hX)
+            randomP1.y = random.randint(int(grid[index].y) - hY, int(grid[index].y) + hY)
+          else:
+            break
         center = grid[index]
         
         dx = center.x - randomP1.x 
@@ -100,7 +106,7 @@ def lineLineFullOverlap(n = 1):
         newLine = Line(randomP1, randomP2)
         shapes.append(newLine)
 
-def polygonPolygonFullOverlap(n = 1):
+def polygonPolygonFullOverlap(pointsTesting, n = 1):
     cols = math.ceil(math.sqrt(n))
     rows = math.ceil(n/cols)
     
@@ -238,7 +244,7 @@ def polygonPolygonFullOverlap(n = 1):
     shapes.extend(polygons)
 
 
-def circleLineFullOverlap(n = 1):
+def circleLineFullOverlap(pointsTesting, n = 1):
     circlesTesting = math.ceil(pointsTesting/3)
     linesTesting = math.floor(pointsTesting/3)
     
@@ -269,6 +275,12 @@ def circleLineFullOverlap(n = 1):
     for i in range(linesTesting):
         index = i % n
         randomP1 = Point(random.randint(int(grid[index].x) - hX, int(grid[index].x) + hX), random.randint(int(grid[index].y) - hY, int(grid[index].y) + hY))
+        while True:
+          if abs(grid[index].x - randomP1.x) < 2  and abs(grid[index].y - randomP1.y) < 2:
+            randomP1.x = random.randint(int(grid[index].x) - hX, int(grid[index].x) + hX)
+            randomP1.y = random.randint(int(grid[index].y) - hY, int(grid[index].y) + hY)
+          else:
+            break
         center = grid[index]
         
         dx = center.x - randomP1.x 
@@ -280,3 +292,11 @@ def circleLineFullOverlap(n = 1):
 
         newLine = Line(randomP1, randomP2)
         shapes.append(newLine)
+        
+test_functions_overlap = {
+    "polygonPolygonOverlap" : polygonPolygonFullOverlap,
+    "circleCircleOverlap" : polygonPolygonFullOverlap,
+    "lineLineOverlap" : polygonPolygonFullOverlap,
+    "aabbNoOverlap" : polygonPolygonFullOverlap,
+    "circleLineOverlap" : polygonPolygonFullOverlap
+}

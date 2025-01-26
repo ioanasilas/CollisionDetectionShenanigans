@@ -5,8 +5,8 @@ import math
 import random
 import time
 from random_testing import circleCircleRandom, polygonPolygonRandom, circleLineRandom, aabbRandom, lineLineRandom, test_functions_random
-from no_overlap_testing import circleLineNoOverlap, polygonPolygonNoOverlap, lineLineNoOverlap, circleCircleNonOverlap, aabbNoOverlap
-from full_overlap_testing import circleCircleFullOverlap, circleLineFullOverlap, polygonPolygonFullOverlap, lineLineFullOverlap, aabbFullOverlap
+from no_overlap_testing import circleLineNoOverlap, polygonPolygonNoOverlap, lineLineNoOverlap, circleCircleNonOverlap, aabbNoOverlap, test_functions_no_overlap
+from full_overlap_testing import circleCircleFullOverlap, circleLineFullOverlap, polygonPolygonFullOverlap, lineLineFullOverlap, aabbFullOverlap, test_functions_overlap
 from shared_data import shapes, times, pointsTestingDict
 from csv_saves import *
 import os
@@ -52,8 +52,13 @@ csv_dir_avg = "collision_test_avg_results"
 os.makedirs(csv_dir_avg, exist_ok=True)
 
 # what are we testing?
-test_type = "random"
-algo_name_test_type = "polygonPolygonRandom"
+test_type = "nooverlap"
+algo_name_test_type = "circleLineNoOverlap"
+
+# Only for overlap
+no_of_positions = 1
+# I didnt make the csv functionality for overlaps yet, but basically this
+# is how many positions the shapes are gonna be split between. Default is 1
 
 for k, v in pointsTestingDict.items():
 
@@ -78,10 +83,23 @@ for k, v in pointsTestingDict.items():
         # circleLineNoOverlap()
         # aabbNoOverlap()
 
-        if algo_name_test_type in test_functions_random:
-            test_functions_random[algo_name_test_type](pointsTesting)
+        if test_type == "random":
+            if algo_name_test_type in test_functions_random:
+                test_functions_random[algo_name_test_type](pointsTesting)
+            else:
+                print("We do not have a test like this.")
+        elif test_type == "nooverlap":
+            if algo_name_test_type in test_functions_no_overlap:
+                test_functions_no_overlap[algo_name_test_type](pointsTesting)
+            else:
+                print("We do not have a test like this.")
+        elif test_type == "overlap":
+            if algo_name_test_type in test_functions_overlap:
+                test_functions_overlap[algo_name_test_type](pointsTesting, no_of_positions)
+            else:
+                print("We do not have a test like this.")
         else:
-            print("We do not have a test like this.")
+            print("This test type does not exist.")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -91,6 +109,7 @@ for k, v in pointsTestingDict.items():
                 outline = int(chr(event.key))
         
         # timing just actual sorting, you're cool ioana \o/
+        random.shuffle(shapes)
         print("Run: ", total_runs + 1)
         startTime = time.time()
         for i in range(len(shapes)):
@@ -134,7 +153,7 @@ for k, v in pointsTestingDict.items():
 
         total_runs += 1
     # after each batch of runs, append the average to this list
-    averages.append(avgTime)
+    averages[pointsTesting] = avgTime
     save_exec_time_detailed(pointsTesting, algo_name_test_type, times, filename)
     print(f"Execution times saved to \"execution_times_{algo_name_test_type}.csv\"")
     # go from 0 again after each batch
@@ -146,6 +165,6 @@ pygame.quit()
 avg_save_path = os.path.join(csv_dir_avg, f"collision_output_{algo_name_test_type}_averages.png")
 filename_avg = os.path.join(csv_dir_avg, f"averages_for{algo_name_test_type}.csv")
 # we then make a csv with averages for each algo; eg for aabb we will have averages for 10, 50, 100, 500, 1000, 10000 points in the same file
-save_exec_time_avg(pointsTesting, algo_name_test_type, averages, filename_avg)
+save_exec_time_avg(algo_name_test_type, averages, filename_avg)
 
 sys.exit()

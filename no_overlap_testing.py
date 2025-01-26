@@ -5,115 +5,111 @@ from shared_data import shapes, pointsTestingDict
 
 xPixels = 1024
 yPixels = 618
-density = 1
+density = 0.5
 
 # Nonoverlapping points generation
 
-def circleCircleNonOverlap():
+def circleCircleNonOverlap(pointsTesting):
     shapesTesting = pointsTesting
-    avgRadius = int(math.sqrt((density * (xPixels * yPixels))/(math.pi * shapesTesting)))
-    hR = int(avgRadius/2)
 
-    xDensity = [0 for i in range(0, 10)]
-    # yDensity = [0 for i in range(0, 10)]
+    n = shapesTesting
+    
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    
+    grid = []
+    
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+            
+    maxRadius = int(min(gridX, gridY)/2) - 1
+    hR = int(maxRadius/2)
 
   # we want shapesTesting many points
     for i in range(0, shapesTesting):
-        while(True): # keep trying until a valid circle in generated
-          randomRadius = random.randint(avgRadius - hR, avgRadius)
+        randomRadius = random.randint(hR, maxRadius)
+        randomPoint = Point(grid[i].x, grid[i].y)
 
-          xTarget = xDensity.index(min(xDensity))
-          xPosMin = max(randomRadius, round((xTarget/10) * xPixels))
-          xPosMax = min(xPixels - randomRadius, round(((xTarget + 1)/10) * xPixels))
+        newCircle = Circle(randomPoint, randomRadius)
+        shapes.append(newCircle)
 
-          # yTarget = yDensity.index(min(yDensity))
-          # yPosMin = round((yTarget/10) * yPixels)
-          # yPosMax = round(((yTarget + 1)/10) * yPixels)
-
-          randomPoint = Point(random.randint(xPosMin, xPosMax), random.randint(randomRadius, yPixels - randomRadius))
-          newCircle = Circle(randomPoint, randomRadius)
-
-          is_overlapping = False
-          # check if overlapping any shape that is already there
-          for shape in shapes:
-            if newCircle.intersects(shape):
-              is_overlapping = True
-              break
-          
-          if not is_overlapping:
-            # add circle if it ok
-            xDensity[xTarget] += 2*math.pi*randomRadius
-            shapes.append(newCircle)
-            break
-
-def aabbNoOverlap():
+def aabbNoOverlap(pointsTesting):
     # this does NOT work,
     # I actually do not know why
     # see debug.. please
     shapesTesting = int(pointsTesting/2)
-    avgSize = int(math.sqrt((density * (xPixels * yPixels))/(shapesTesting)))
-    hS = int(avgSize/2)
 
-    xDensity = [0 for i in range(0, 10)]
-    print(f"Shapes to generate: {shapesTesting}, Size range: {avgSize}")
-
-
-    for i in range(shapesTesting):
-        while(True):
-          xTarget = xDensity.index(min(xDensity))
-          xPosMin = round((xTarget/10) * xPixels)
-          xPosMax = round(((xTarget + 1)/10) * xPixels)
-
-          randomP1 = Point(random.randint(xPosMin, min(xPosMax, xPixels - hS)), random.randint(0, yPixels - hS))
-          # randomP1 = Point(random.randint(0, xPixels - hS), random.randint(0, yPixels - hS))
-          randomP2 = Point(random.randint(randomP1.x + hS, min(xPixels, randomP1.x + avgSize)), random.randint(randomP1.y + hS, min(yPixels, randomP1.y + avgSize)))
-
-          newBox = Rectangle(randomP1, randomP2)
-          is_overlapping = False
-          for shape in shapes:
-             if newBox.intersects(shape):
-                is_overlapping = True
-                  #  print(f"Not adding {newBox} to shapes")
-                break
-                
-          if not is_overlapping:
-            xDensity[xTarget] += avgSize**2
-            shapes.append(newBox)
-            break
-
-def lineLineNoOverlap():
-    shapesTesting = int(pointsTesting / 2)
-    avgLength = int(math.sqrt((density * (xPixels * yPixels)) / shapesTesting))
-    lengthRange = int(avgLength*2)
+    n = shapesTesting
     
-    xDensity = [0 for i in range(0, 10)]
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = int(xPixels/cols)
+    gridY = int(yPixels/rows)
+    hX = round((xPixels/cols)/2) - 1
+    hY = round((yPixels/rows)/2) - 1
+    
+    grid = []
+    
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
 
     for i in range(shapesTesting):
-      while(True):
-        xTarget = xDensity.index(min(xDensity))
-        xPosMin = max(lengthRange, round((xTarget/10) * xPixels))
-        xPosMax = min(xPixels - lengthRange, round(((xTarget + 1)/10) * xPixels))
-          
-        randomP1 = Point(random.randint(xPosMin, xPosMax), random.randint(0, yPixels))
-        randomP2 = Point(
-            max(0, min(xPixels, randomP1.x + random.randint(-lengthRange, lengthRange))),
-            max(0, min(yPixels, randomP1.y + random.randint(-lengthRange, lengthRange))),
-        )
+        randomP1 = Point(random.randint(int(grid[i].x) - hX, int(grid[i].x)), random.randint(int(grid[i].y) - hY, int(grid[i].y)))
+        randomP2 = Point(random.randint(int(grid[i].x), int(grid[i].x) + hX), random.randint(int(grid[i].y), int(grid[i].y) + hY))
+
+        newBox = Rectangle(randomP1, randomP2)
+        shapes.append(newBox)
+
+
+def lineLineNoOverlap(pointsTesting):
+    shapesTesting = int(pointsTesting / 2)
+    
+    n = shapesTesting
+    
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hX = round((xPixels/cols)/2) - 1
+    hY = round((yPixels/rows)/2) - 1
+    
+    grid = []
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+            
+    for i in range(shapesTesting): 
+        randomP1 = Point(random.randint(int(grid[i].x) - hX, int(grid[i].x) + hX), random.randint(int(grid[i].y) - hY, int(grid[i].y) + hY))
+        while True:
+          if abs(grid[i].x - randomP1.x) < 2  and abs(grid[i].y - randomP1.y) < 2:
+            randomP1.x = random.randint(int(grid[i].x) - hX, int(grid[i].x) + hX)
+            randomP1.y = random.randint(int(grid[i].y) - hY, int(grid[i].y) + hY)
+          else:
+            break
+                 
+        center = grid[i]
+        
+        dx = center.x - randomP1.x 
+        dy = center.y - randomP1.y
+        magnitude = math.sqrt(dx**2 + dy**2)
+        
+        newPoint = Point(dx/magnitude, dy/magnitude)        
+        randomP2 = Point(round(randomP1.x + (newPoint.x * (magnitude * 2))), round(randomP1.y + (newPoint.y * (magnitude* 2))))
 
         newLine = Line(randomP1, randomP2)
-        is_overlapping = False
-        for shape in shapes:
-           if newLine.intersects(shape):
-              is_overlapping = True
-              #  print(f"Not adding {newBox} to shapes")
-              break
-                
-        if not is_overlapping:
-          xDensity[xTarget] += avgLength
-          shapes.append(newLine)
-          break
+        shapes.append(newLine)
 
-def polygonPolygonNoOverlap():
+def polygonPolygonNoOverlap(pointsTesting):
     points_used = 0
     shapesTesting = 0
     maxEdges = 10
@@ -141,22 +137,26 @@ def polygonPolygonNoOverlap():
     # print(shapesTesting, points_used)
     # each poly has between 3 and 10 edges
     # get how many polys we will get
-    avgSize = int(math.sqrt((density * (xPixels * yPixels))/(shapesTesting)))
-    hS = int(avgSize/2)
-    sizeRange = int(avgSize + hS)
+    n = shapesTesting
+    
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hS = round(min(gridX, gridY)/2)
+    
+    grid = []
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
     # leftover_points = pointsTesting % num_edges
-
-    xDensity = [0 for i in range(0, 10)]
-
+    
+    i = 0
     for edgesInPolygon in edgeNumArr:
-      while(True):
-        xTarget = xDensity.index(min(xDensity))
-        xPosMin = round((xTarget/10) * xPixels)
-        xPosMax = round(((xTarget + 1)/10) * xPixels)
-        
-        # we can use Valtr algorithm
-        randomPosX = random.randint(hS + xPosMin, xPosMax - hS)
-        randomPosY = random.randint(hS, yPixels - hS)
+        randomPosX = int(grid[i].x)
+        randomPosY = int(grid[i].y)
         X = random.sample(range(randomPosX - hS, randomPosX+hS), edgesInPolygon) 
         Y = random.sample(range(randomPosY - hS, randomPosY+hS), edgesInPolygon) 
 
@@ -233,17 +233,8 @@ def polygonPolygonNoOverlap():
         yShift = minY - minPolY
         translated_polygon = Polygon([Point(p.x + xShift, p.y + yShift) for p in polygon_points])
         
-        is_overlapping = False
-        for shape in shapes:
-           if translated_polygon.intersects(shape):
-              is_overlapping = True
-              #  print(f"Not adding {newBox} to shapes")
-              break
-                
-        if not is_overlapping:
-          xDensity[xTarget] += avgSize**2
-          shapes.append(translated_polygon)
-          break
+        shapes.append(translated_polygon)
+        i += 1
 
     # print(polygons)
     # print(num_edges)
@@ -252,63 +243,68 @@ def polygonPolygonNoOverlap():
     # Add every polygon to shapes
 
 
-def circleLineNoOverlap():
+def circleLineNoOverlap(pointsTesting):
     circlesTesting = math.ceil(pointsTesting/3)
     linesTesting = math.floor(pointsTesting/3)
-    
-    avgRadius = int(math.sqrt((density * (xPixels * yPixels))/(math.pi * circlesTesting)))
-    hR = int(avgRadius/2)
-    
-    xDensity = [0 for i in range(0, 10)]
 
+    toGenerate = []
     for i in range(circlesTesting):
-      while(True):
-        randomRadius = random.randint(avgRadius - hR, avgRadius)
-        
-        xTarget = xDensity.index(min(xDensity))
-        xPosMin = max(randomRadius, round((xTarget/10) * xPixels))
-        xPosMax = min(xPixels - randomRadius, round(((xTarget + 1)/10) * xPixels))
-        
-        randomPoint = Point(random.randint(0 + randomRadius, xPixels - randomRadius), random.randint(0 + randomRadius, yPixels - randomRadius))
+      toGenerate.append(0)
+    for i in range(linesTesting):
+      toGenerate.append(1)
+    
+    n = circlesTesting + linesTesting
+    
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n/cols)
+    
+    gridX = round(xPixels/cols)
+    gridY = round(yPixels/rows)
+    hX = round((xPixels/cols)/2) - 1
+    hY = round((yPixels/rows)/2) - 1
+    
+    grid = []
+    for i in range(0, cols):
+        for j in range(0, rows):
+            newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
+            grid.append(newPoint)
+    
+    maxRadius = int(min(gridX, gridY)/2) - 1
+    hR = int(maxRadius/2)
+
+    for i in range(n):
+      randomIndex = random.randint(0, len(toGenerate) - 1)
+      if toGenerate.pop(randomIndex) == 0:
+        randomRadius = random.randint(hR, maxRadius)
+        randomPoint = Point(grid[i].x, grid[i].y)
 
         newCircle = Circle(randomPoint, randomRadius)
-        is_overlapping = False
-        for shape in shapes:
-            if newCircle.intersects(shape):
-              is_overlapping = True
-              break
+        shapes.append(newCircle)
+      else:
+        randomP1 = Point(random.randint(int(grid[i].x) - hX, int(grid[i].x) + hX), random.randint(int(grid[i].y) - hY, int(grid[i].y) + hY))
+        while True:
+          if abs(grid[i].x - randomP1.x) < 2  and abs(grid[i].y - randomP1.y) < 2:
+            randomP1.x = random.randint(int(grid[i].x) - hX, int(grid[i].x) + hX)
+            randomP1.y = random.randint(int(grid[i].y) - hY, int(grid[i].y) + hY)
+          else:
+            break
           
-        if not is_overlapping:
-          # add circle if it ok
-          xDensity[xTarget] += 2*math.pi*randomRadius
-          shapes.append(newCircle)
-          break
-
-    avgLength = int(math.sqrt((density * (xPixels * yPixels)) / linesTesting))
-    lengthRange = int(avgLength)
-
-    for i in range(linesTesting):
-      while(True):
-        xTarget = xDensity.index(min(xDensity))
-        xPosMin = max(lengthRange, round((xTarget/10) * xPixels))
-        xPosMax = min(xPixels - lengthRange, round(((xTarget + 1)/10) * xPixels))
+        center = grid[i]
         
-        randomP1 = Point(random.randint(xPosMin, xPosMax), random.randint(0, yPixels))
-        randomP2 = Point(
-            max(0, min(xPixels, randomP1.x + random.randint(-lengthRange, lengthRange))),
-            max(0, min(yPixels, randomP1.y + random.randint(-lengthRange, lengthRange))),
-        )
+        dx = center.x - randomP1.x 
+        dy = center.y - randomP1.y
+        magnitude = math.sqrt(dx**2 + dy**2)
+        
+        newPoint = Point(dx/magnitude, dy/magnitude)        
+        randomP2 = Point(round(randomP1.x + (newPoint.x * (magnitude * 2))), round(randomP1.y + (newPoint.y * (magnitude* 2))))
 
         newLine = Line(randomP1, randomP2)
-        is_overlapping = False
-        for shape in shapes:
-           if newLine.intersects(shape):
-              is_overlapping = True
-              #  print(f"Not adding {newBox} to shapes")
-              break
-                
-        if not is_overlapping:
-          xDensity[xTarget] += avgLength
-          shapes.append(newLine)
-          break
-
+        shapes.append(newLine)
+        
+test_functions_no_overlap = {
+    "polygonPolygonNoOverlap" : polygonPolygonNoOverlap,
+    "circleCircleNoOverlap" : circleCircleNonOverlap,
+    "lineLineNoOverlap" : lineLineNoOverlap,
+    "aabbNoOverlap" : aabbNoOverlap,
+    "circleLineNoOverlap" : circleLineNoOverlap
+}

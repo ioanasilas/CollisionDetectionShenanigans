@@ -211,7 +211,7 @@ def circleLineRandom(pointsTesting):
 # dex to map stuff for main call of csv
 test_functions_random = {
     "polygonPolygonRandom" : polygonPolygonRandom,
-    "circleLineRandom" : circleCircleRandom,
+    "circleCircleRandom" : circleCircleRandom,
     "lineLineRandom" : lineLineRandom,
     "aabbRandom" : aabbRandom,
     "circleLineRandom" : circleLineRandom
