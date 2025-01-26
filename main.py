@@ -6,8 +6,8 @@ import random
 import time
 from random_testing import circleCircleRandom, polygonPolygonRandom, circleLineRandom, aabbRandom, lineLineRandom, test_functions_random
 from no_overlap_testing import circleLineNoOverlap, polygonPolygonNoOverlap, lineLineNoOverlap, circleCircleNonOverlap, aabbNoOverlap, test_functions_no_overlap
-from full_overlap_testing import circleCircleFullOverlap, circleLineFullOverlap, polygonPolygonFullOverlap, lineLineFullOverlap, aabbFullOverlap, test_functions_overlap
-from shared_data import shapes, times, pointsTestingDict
+from full_overlap_testing import circleCircleFullOverlap, circleLineFullOverlap, polygonPolygonFullOverlap, lineLineFullOverlap, aabbFullOverlap, test_functions_overlap, test_functions_grid_overlap
+from shared_data import shapes, times, pointsTestingDict, overlap_positions_testing
 from csv_saves import *
 import os
 
@@ -35,28 +35,31 @@ os.makedirs(base_dir, exist_ok=True)
 random_dir = os.path.join(base_dir, "random")
 no_overlap_dir = os.path.join(base_dir, "nooverlap")
 overlap_dir = os.path.join(base_dir, "overlap")
+grid_overlap_dir = os.path.join(base_dir, "gridoverlap")
 os.makedirs(random_dir, exist_ok=True)
 os.makedirs(no_overlap_dir, exist_ok=True)
 os.makedirs(overlap_dir, exist_ok=True)
+os.makedirs(grid_overlap_dir, exist_ok=True)
 
 csv_dir = "collision_test_detailed_results"
 os.makedirs(csv_dir, exist_ok=True)
 random_dir_csv = os.path.join(csv_dir, "random")
 no_overlap_dir_csv = os.path.join(csv_dir, "nooverlap")
 overlap_dir_csv = os.path.join(csv_dir, "overlap")
+grid_overlap_dir_csv = os.path.join(csv_dir, "gridoverlap")
 os.makedirs(random_dir_csv, exist_ok=True)
 os.makedirs(no_overlap_dir_csv, exist_ok=True)
 os.makedirs(overlap_dir_csv, exist_ok=True)
+os.makedirs(grid_overlap_dir_csv, exist_ok=True)
 
 csv_dir_avg = "collision_test_avg_results"
 os.makedirs(csv_dir_avg, exist_ok=True)
 
 # what are we testing?
-test_type = "nooverlap"
-algo_name_test_type = "circleLineNoOverlap"
+test_type = "overlap"
+algo_name_test_type = "polygonPolygonOverlap"
 
 # Only for overlap
-no_of_positions = 1
 # I didnt make the csv functionality for overlaps yet, but basically this
 # is how many positions the shapes are gonna be split between. Default is 1
 
@@ -67,6 +70,7 @@ for k, v in pointsTestingDict.items():
     total_runs = 0
     # get value for max Runs
     max_runs = pointsTestingDict[k]
+    no_of_positions = overlap_positions_testing[k]
     # get key for points testing
     pointsTesting = k
     outline = 1
@@ -95,7 +99,12 @@ for k, v in pointsTestingDict.items():
                 print("We do not have a test like this.")
         elif test_type == "overlap":
             if algo_name_test_type in test_functions_overlap:
-                test_functions_overlap[algo_name_test_type](pointsTesting, no_of_positions)
+                test_functions_overlap[algo_name_test_type](pointsTesting)
+            else:
+                print("We do not have a test like this.")
+        elif test_type == "gridoverlap":
+            if algo_name_test_type in test_functions_grid_overlap:
+                test_functions_grid_overlap[algo_name_test_type](pointsTesting, no_of_positions)
             else:
                 print("We do not have a test like this.")
         else:
@@ -142,6 +151,9 @@ for k, v in pointsTestingDict.items():
         elif test_type == "overlap":
             save_path = os.path.join(overlap_dir, f"collision_output_{algo_name_test_type}_{pointsTesting}_run{total_runs + 1}.png")
             filename = os.path.join(overlap_dir_csv,f"execution_times_{algo_name_test_type}_{pointsTesting}.csv")
+        elif test_type == "gridoverlap":
+            save_path = os.path.join(grid_overlap_dir, f"collision_output_{algo_name_test_type}_{pointsTesting}_run{total_runs + 1}.png")
+            filename = os.path.join(grid_overlap_dir_csv,f"execution_times_{algo_name_test_type}_{pointsTesting}.csv")
         elif test_type == "nooverlap":
             save_path = os.path.join(no_overlap_dir, f"collision_output_{algo_name_test_type}_{pointsTesting}_run{total_runs + 1}.png")
             filename = os.path.join(no_overlap_dir_csv,f"execution_times_{algo_name_test_type}_{pointsTesting}.csv")
@@ -165,6 +177,9 @@ pygame.quit()
 avg_save_path = os.path.join(csv_dir_avg, f"collision_output_{algo_name_test_type}_averages.png")
 filename_avg = os.path.join(csv_dir_avg, f"averages_for{algo_name_test_type}.csv")
 # we then make a csv with averages for each algo; eg for aabb we will have averages for 10, 50, 100, 500, 1000, 10000 points in the same file
-save_exec_time_avg(algo_name_test_type, averages, filename_avg)
+if test_type == "gridoverlap":
+    save_exec_time_avg_grid_overlap(algo_name_test_type, averages, filename_avg)
+else:
+    save_exec_time_avg(algo_name_test_type, averages, filename_avg)
 
 sys.exit()

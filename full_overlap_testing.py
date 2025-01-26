@@ -295,8 +295,16 @@ def circleLineFullOverlap(pointsTesting, n = 1):
         
 test_functions_overlap = {
     "polygonPolygonOverlap" : polygonPolygonFullOverlap,
-    "circleCircleOverlap" : polygonPolygonFullOverlap,
-    "lineLineOverlap" : polygonPolygonFullOverlap,
-    "aabbNoOverlap" : polygonPolygonFullOverlap,
-    "circleLineOverlap" : polygonPolygonFullOverlap
+    "circleCircleOverlap" : circleCircleFullOverlap,
+    "lineLineOverlap" : lineLineFullOverlap,
+    "aabbNoOverlap" : aabbFullOverlap,
+    "circleLineOverlap" : circleLineFullOverlap
+}
+
+test_functions_grid_overlap = {
+    "polygonPolygonGridOverlap" : polygonPolygonFullOverlap,
+    "circleCircleGridOverlap" : circleCircleFullOverlap,
+    "lineLineGridOverlap" : lineLineFullOverlap,
+    "aabbGridOverlap" : aabbFullOverlap,
+    "circleLineGridOverlap" : circleLineFullOverlap
 }
