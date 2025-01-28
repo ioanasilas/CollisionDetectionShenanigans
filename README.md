@@ -29,7 +29,7 @@ This `test_type` places all the generated shapes in one position to make sure al
 - `circleLineOverlap`
 
 ### gridoverlap
-This `test_type` places all the generated shapes in multiple positions `n` making a grid. Every shape has to intersect with all the other shapes in the assigned grid
+This `test_type` places all the generated shapes across multiple positions `n` making a grid. Every shape has to intersect with all the other shapes in their assigned grid
 - `circleCircleGridOverlap`
 - `aabbGridOverlap`
 - `lineLineGridOverlap`
