@@ -115,11 +115,12 @@ def polygonPolygonFullOverlap(pointsTesting, n = 1):
     hS = round(min(gridX, gridY)/2)
     
     grid = []
+    grid_check = []
     for i in range(0, cols):
         for j in range(0, rows):
             newPoint = Point(gridX/2 + (i * gridX), gridY/2 + (j * gridY))
             grid.append(newPoint)
-            
+                        
     points_used = 0
     shapesTesting = 0
     maxEdges = 10
@@ -153,95 +154,104 @@ def polygonPolygonFullOverlap(pointsTesting, n = 1):
 
     i = 0
     for edgesInPolygon in edgeNumArr:
-        # we can use Valtr algorithm
-        index = i % n
-        randomPosX = int(grid[index].x)
-        randomPosY = int(grid[index].y)
-        X = random.sample(range(randomPosX - hS, randomPosX+hS), edgesInPolygon) 
-        Y = random.sample(range(randomPosY - hS, randomPosY+hS), edgesInPolygon) 
+        maxRuns = 100
+        runs = 0
+        while maxRuns > 0:
+            runs += 1
+            # we can use Valtr algorithm
+            index = i % n
+            randomPosX = int(grid[index].x)
+            randomPosY = int(grid[index].y)
+            X = random.sample(range(randomPosX - hS, randomPosX+hS), edgesInPolygon) 
+            Y = random.sample(range(randomPosY - hS, randomPosY+hS), edgesInPolygon)
 
-        # sort X, Y to get min, max
-        X.sort()
-        Y.sort()
+            # sort X, Y to get min, max
+            X.sort()
+            Y.sort()
 
-        minX, maxX = X[0], X[-1]
-        minY, maxY = Y[0], Y[-1]
+            minX, maxX = X[0], X[-1]
+            minY, maxY = Y[0], Y[-1]
 
-        # get rid of min and max
-        X1 = X[1:-1]
-        Y1 = Y[1:-1]
+            # get rid of min and max
+            X1 = X[1:-1]
+            Y1 = Y[1:-1]
 
-        # divide remaining into 2 groups
-        xVec = []
-        yVec = []
+            # divide remaining into 2 groups
+            xVec = []
+            yVec = []
 
-        lastTop = minX
-        lastBot = minX
+            lastTop = minX
+            lastBot = minX
 
-        for x in X1:  # Loop through X1 to calculate differences
-            if bool(random.getrandbits(1)):
-                xVec.append(x - lastTop)  # add dif to xVec
-                lastTop = x  # update lastTop to current x coord
-            else:
-                xVec.append(lastBot - x)
-                lastBot = x
+            for x in X1:  # Loop through X1 to calculate differences
+                if bool(random.getrandbits(1)):
+                    xVec.append(x - lastTop)  # add dif to xVec
+                    lastTop = x  # update lastTop to current x coord
+                else:
+                    xVec.append(lastBot - x)
+                    lastBot = x
 
-        # Close the shape by adding final points
-        xVec.append(maxX - lastTop)
-        xVec.append(lastBot - maxX)
+            # Close the shape by adding final points
+            xVec.append(maxX - lastTop)
+            xVec.append(lastBot - maxX)
 
-        lastTop = minY
-        lastBot = minY
+            lastTop = minY
+            lastBot = minY
 
-        for y in Y1:  # Loop through Y1 to calculate differences
-            if bool(random.getrandbits(1)):
-                yVec.append(y - lastTop)  # add dif to yVec
-                lastTop = y  # update lastTop to current y coord
-            else:
-                yVec.append(lastBot - y)
-                lastBot = y
+            for y in Y1:  # Loop through Y1 to calculate differences
+                if bool(random.getrandbits(1)):
+                    yVec.append(y - lastTop)  # add dif to yVec
+                    lastTop = y  # update lastTop to current y coord
+                else:
+                    yVec.append(lastBot - y)
+                    lastBot = y
 
-        # Close the shape by adding final points
-        yVec.append(maxY - lastTop)
-        yVec.append(lastBot - maxY)
+            # Close the shape by adding final points
+            yVec.append(maxY - lastTop)
+            yVec.append(lastBot - maxY)
 
-        # Shuffle points together
-        points = list(zip(xVec, yVec))
-        random.shuffle(points)
+            # Shuffle points together
+            points = list(zip(xVec, yVec))
+            random.shuffle(points)
 
-        # Create vectors with shuffled coordinates
-        vectors = [Point(x, y) for x, y in points]
+            # Create vectors with shuffled coordinates
+            vectors = [Point(x, y) for x, y in points]
 
-        # Sort vectors by angle
-        vectors.sort(key=lambda v: math.atan2(v.y, v.x))
+            # Sort vectors by angle
+            vectors.sort(key=lambda v: math.atan2(v.y, v.x))
 
-        # Lay the points end to end
-        x, y = 0, 0
-        minPolX, minPolY = 0, 0
-        polygon_points = []
+            # Lay the points end to end
+            x, y = 0, 0
+            minPolX, minPolY = 0, 0
+            polygon_points = []
 
-        for v in vectors:
-            polygon_points.append(Point(x, y))
-            x += v.getX()
-            y += v.getY()
+            for v in vectors:
+                polygon_points.append(Point(x, y))
+                x += v.getX()
+                y += v.getY()
 
-            minPolX = min(minPolX, x)
-            minPolY = min(minPolY, y)
+                minPolX = min(minPolX, x)
+                minPolY = min(minPolY, y)
 
-        # move polygon to original min/max coordinates
-        xShift = minX - minPolX
-        yShift = minY - minPolY
-        translated_polygon = Polygon([Point(p.x + xShift, p.y + yShift) for p in polygon_points])
-
-        polygons.append(translated_polygon)
-        i += 1
+            # move polygon to original min/max coordinates
+            xShift = minX - minPolX
+            yShift = minY - minPolY
+            
+            final_points = [Point(p.x + xShift, p.y + yShift) for p in polygon_points]
+            translated_polygon = Polygon(final_points)
+            
+            if not Point(randomPosX, randomPosY).inPolygon(translated_polygon) and runs != 100:
+                continue
+                
+            shapes.append(translated_polygon)
+            i += 1
+            break
 
     # print(polygons)
     # print(num_edges)
     # print(no_of_polys)
 
     # Add every polygon to shapes
-    shapes.extend(polygons)
 
 
 def circleLineFullOverlap(pointsTesting, n = 1):
