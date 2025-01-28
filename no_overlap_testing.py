@@ -9,7 +9,7 @@ density = 0.5
 
 # Nonoverlapping points generation
 
-def circleCircleNonOverlap(pointsTesting):
+def circleCircleNoOverlap(pointsTesting):
     shapesTesting = pointsTesting
 
     n = shapesTesting
@@ -303,7 +303,7 @@ def circleLineNoOverlap(pointsTesting):
         
 test_functions_no_overlap = {
     "polygonPolygonNoOverlap" : polygonPolygonNoOverlap,
-    "circleCircleNoOverlap" : circleCircleNonOverlap,
+    "circleCircleNoOverlap" : circleCircleNoOverlap,
     "lineLineNoOverlap" : lineLineNoOverlap,
     "aabbNoOverlap" : aabbNoOverlap,
     "circleLineNoOverlap" : circleLineNoOverlap

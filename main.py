@@ -5,7 +5,7 @@ import math
 import random
 import time
 from random_testing import circleCircleRandom, polygonPolygonRandom, circleLineRandom, aabbRandom, lineLineRandom, test_functions_random
-from no_overlap_testing import circleLineNoOverlap, polygonPolygonNoOverlap, lineLineNoOverlap, circleCircleNonOverlap, aabbNoOverlap, test_functions_no_overlap
+from no_overlap_testing import circleLineNoOverlap, polygonPolygonNoOverlap, lineLineNoOverlap, circleCircleNoOverlap, aabbNoOverlap, test_functions_no_overlap
 from full_overlap_testing import circleCircleFullOverlap, circleLineFullOverlap, polygonPolygonFullOverlap, lineLineFullOverlap, aabbFullOverlap, test_functions_overlap, test_functions_grid_overlap
 from shared_data import shapes, times, pointsTestingDict, overlap_positions_testing
 from csv_saves import *
@@ -56,8 +56,8 @@ csv_dir_avg = "collision_test_avg_results"
 os.makedirs(csv_dir_avg, exist_ok=True)
 
 # what are we testing?
-test_type = "overlap"
-algo_name_test_type = "aabbOverlap"
+test_type = "nooverlap"
+algo_name_test_type = "circleLineNooverlap"
 
 # Only for overlap
 # I didnt make the csv functionality for overlaps yet, but basically this
