@@ -180,7 +180,7 @@ for k, v in pointsTestingDict.items():
 
 pygame.quit()
 avg_save_path = os.path.join(csv_dir_avg, f"collision_output_{algo_name_test_type}_averages.png")
-filename_avg = os.path.join(csv_dir_avg, f"averages_for{algo_name_test_type}.csv")
+filename_avg = os.path.join(csv_dir_avg, f"averages_for_{algo_name_test_type}.csv")
 # we then make a csv with averages for each algo; eg for aabb we will have averages for 10, 50, 100, 500, 1000, 10000 points in the same file
 if test_type == "gridoverlap":
     save_exec_time_avg_grid_overlap(algo_name_test_type, averages, filename_avg)
