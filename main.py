@@ -57,7 +57,7 @@ os.makedirs(csv_dir_avg, exist_ok=True)
 
 # what are we testing?
 test_type = "overlap"
-algo_name_test_type = "polygonPolygonOverlap"
+algo_name_test_type = "aabbOverlap"
 
 # Only for overlap
 # I didnt make the csv functionality for overlaps yet, but basically this
@@ -92,23 +92,28 @@ for k, v in pointsTestingDict.items():
                 test_functions_random[algo_name_test_type](pointsTesting)
             else:
                 print("We do not have a test like this.")
+                exit()
         elif test_type == "nooverlap":
             if algo_name_test_type in test_functions_no_overlap:
                 test_functions_no_overlap[algo_name_test_type](pointsTesting)
             else:
                 print("We do not have a test like this.")
+                exit()
         elif test_type == "overlap":
             if algo_name_test_type in test_functions_overlap:
                 test_functions_overlap[algo_name_test_type](pointsTesting)
             else:
                 print("We do not have a test like this.")
+                exit()
         elif test_type == "gridoverlap":
             if algo_name_test_type in test_functions_grid_overlap:
                 test_functions_grid_overlap[algo_name_test_type](pointsTesting, no_of_positions)
             else:
                 print("We do not have a test like this.")
+                exit()
         else:
             print("This test type does not exist.")
+            exit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
