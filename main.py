@@ -11,22 +11,50 @@ from shared_data import shapes, times, pointsTestingDict, overlap_positions_test
 from csv_saves import *
 import os
 
+# What would you like to test?
+algo_name_test_type = "polygonPolygonGridOverlap"
+
+test_type = ""
+test_type_dict = {
+    "circleCircleRandom": "overlap",
+    "aabbRandom": "overlap",
+    "lineLineRandom": "overlap",
+    "polygonPolygonRandom": "overlap",
+    "circleLineRandom": "overlap",
+    
+    "circleCircleNoOverlap": "nooverlap",
+    "aabbNoOverlap": "nooverlap",
+    "lineLineNoOverlap": "nooverlap",
+    "polygonPolygonNoOverlap": "nooverlap",
+    "circleLineNoOverlap": "nooverlap",
+    
+    "circleCircleOverlap": "overlap",
+    "aabbOverlap": "overlap",
+    "lineLineOverlap": "overlap",
+    "polygonPolygonOverlap": "overlap",
+    "circleLineOverlap": "overlap",
+    
+    "circleCircleGridOverlap": "gridoverlap",
+    "aabbGridOverlap": "gridoverlap",
+    "lineLineGridOverlap": "gridoverlap",
+    "polygonPolygonGridOverlap": "gridoverlap",
+    "circleLineGridOverlap": "gridoverlap"
+}
+
+if algo_name_test_type in test_type_dict.keys():
+    test_type = test_type_dict[algo_name_test_type]
+else:
+    print("We do not have a test like this.")
+    exit()
+    
 WHITE = (255, 255, 255)
 RED = (200, 100, 100)
 GREEN = (100, 200, 150)
 GREY = (25, 25, 25)
 
-
 pygame.init()
 screen = pygame.display.set_mode((1024, 618))
 pygame.display.set_caption("Collision Detection Tests")
-
-# circleCircleRandom()
-# aabbRandom()
-# lineLineRandom()
-# circleLineRandom()
-# polygonPolygonRandom()
-
 
 # make directory to save visual outputs and csv
 base_dir = "collision_visual_outputs"
@@ -54,10 +82,6 @@ os.makedirs(grid_overlap_dir_csv, exist_ok=True)
 
 csv_dir_avg = "collision_test_avg_results"
 os.makedirs(csv_dir_avg, exist_ok=True)
-
-# what are we testing?
-test_type = "gridoverlap"
-algo_name_test_type = "circleLineGridOverlap"
 
 # Only for overlap
 # I didnt make the csv functionality for overlaps yet, but basically this
