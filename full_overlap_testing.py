@@ -297,7 +297,7 @@ test_functions_overlap = {
     "polygonPolygonOverlap" : polygonPolygonFullOverlap,
     "circleCircleOverlap" : circleCircleFullOverlap,
     "lineLineOverlap" : lineLineFullOverlap,
-    "aabbNoOverlap" : aabbFullOverlap,
+    "aabbOverlap" : aabbFullOverlap,
     "circleLineOverlap" : circleLineFullOverlap
 }
 
