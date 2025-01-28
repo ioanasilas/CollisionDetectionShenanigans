@@ -185,12 +185,14 @@ def circleLineRandom(pointsTesting):
     circlesTesting = math.ceil(pointsTesting/3)
     linesTesting = math.floor(pointsTesting/3)
     
-    avgRadius = int(math.sqrt((density * (xPixels * yPixels))/(math.pi * circlesTesting)))
+    avgRadius = int(math.sqrt((density * (xPixels * yPixels))/(math.pi * (circlesTesting + linesTesting))))
+    if avgRadius * 1.5 > yPixels/2:
+        avgRadius = int((yPixels/2)/1.5)
     hR = int(avgRadius/2)
-
+    
     for i in range(circlesTesting):
         randomRadius = random.randint(avgRadius - hR, avgRadius + hR)
-        randomPoint = Point(random.randint(0 + randomRadius, xPixels - randomRadius), random.randint(0 + randomRadius, yPixels - randomRadius))
+        randomPoint = Point(random.randint(randomRadius, xPixels - randomRadius), random.randint(randomRadius, yPixels - randomRadius))
 
         newCircle = Circle(randomPoint, randomRadius)
         shapes.append(newCircle)
