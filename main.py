@@ -56,8 +56,8 @@ csv_dir_avg = "collision_test_avg_results"
 os.makedirs(csv_dir_avg, exist_ok=True)
 
 # what are we testing?
-test_type = "nooverlap"
-algo_name_test_type = "circleLineNooverlap"
+test_type = "gridoverlap"
+algo_name_test_type = "circleLineGridOverlap"
 
 # Only for overlap
 # I didnt make the csv functionality for overlaps yet, but basically this

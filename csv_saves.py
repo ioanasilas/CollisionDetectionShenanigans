@@ -11,7 +11,7 @@ def save_exec_time_detailed(pointsTesting, algo_name_test_type, times, filename)
     writer.writerow([f"Testing for {pointsTesting} points", algo_name_test_type])
     writer.writerow(["Run number", "Execution time (s)"])
     for i, time in enumerate(times):
-      writer.writerow([i + 1, time])
+      writer.writerow([i + 1, f"{time:.9f}"])
 
 def save_exec_time_avg(algo_name_test_type, averages, filename):
   with open(filename, mode = 'w', newline='') as file:
@@ -19,7 +19,7 @@ def save_exec_time_avg(algo_name_test_type, averages, filename):
     writer.writerow([f"Testing {algo_name_test_type}"])
     writer.writerow(["No. points", "Avg. execution time (s)"])
     for key, avg_time in averages.items():
-      writer.writerow([key, avg_time])
+      writer.writerow([key, f"{avg_time:.9f}"])
       
 def save_exec_time_avg_grid_overlap(algo_name_test_type, averages, filename):
   with open(filename, mode = 'w', newline='') as file:
@@ -27,4 +27,4 @@ def save_exec_time_avg_grid_overlap(algo_name_test_type, averages, filename):
     writer.writerow([f"Testing {algo_name_test_type}"])
     writer.writerow(["No. points", "No. positions" , "Avg. execution time (s)"])
     for key, avg_time in averages.items():
-      writer.writerow([key, overlap_positions_testing[key], avg_time])
+      writer.writerow([key, overlap_positions_testing[key], f"{avg_time:.9f}"])
