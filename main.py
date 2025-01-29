@@ -12,39 +12,39 @@ from csv_saves import *
 import os
 
 # What would you like to test?
-algo_name_test_type = "polygonPolygonGridOverlap"
+algo_name_test_type = "circleLineGridOverlap"
 
 test_type = ""
 test_type_dict = {
-    "circleCircleRandom": "overlap",
-    "aabbRandom": "overlap",
-    "lineLineRandom": "overlap",
-    "polygonPolygonRandom": "overlap",
-    "circleLineRandom": "overlap",
+    "circleCircleRandom": "random", # Done
+    "aabbRandom": "random", # Done
+    "lineLineRandom": "random", # Done
+    "polygonPolygonRandom": "random", # Done
+    "circleLineRandom": "random", # Done
     
-    "circleCircleNoOverlap": "nooverlap",
-    "aabbNoOverlap": "nooverlap",
-    "lineLineNoOverlap": "nooverlap",
-    "polygonPolygonNoOverlap": "nooverlap",
-    "circleLineNoOverlap": "nooverlap",
+    "circleCircleNoOverlap": "nooverlap", # Done
+    "aabbNoOverlap": "nooverlap", # Done
+    "lineLineNoOverlap": "nooverlap", # Done
+    "polygonPolygonNoOverlap": "nooverlap", # Done
+    "circleLineNoOverlap": "nooverlap", # Done
     
-    "circleCircleOverlap": "overlap",
-    "aabbOverlap": "overlap",
-    "lineLineOverlap": "overlap",
-    "polygonPolygonOverlap": "overlap",
-    "circleLineOverlap": "overlap",
+    "circleCircleOverlap": "overlap", # Done
+    "aabbOverlap": "overlap", # Done
+    "lineLineOverlap": "overlap", #Done
+    "polygonPolygonOverlap": "overlap", # Done
+    "circleLineOverlap": "overlap", # Done
     
-    "circleCircleGridOverlap": "gridoverlap",
-    "aabbGridOverlap": "gridoverlap",
-    "lineLineGridOverlap": "gridoverlap",
-    "polygonPolygonGridOverlap": "gridoverlap",
-    "circleLineGridOverlap": "gridoverlap"
+    "circleCircleGridOverlap": "gridoverlap", # Done
+    "aabbGridOverlap": "gridoverlap", # Done
+    "lineLineGridOverlap": "gridoverlap", # Done
+    "polygonPolygonGridOverlap": "gridoverlap", # Done
+    "circleLineGridOverlap": "gridoverlap" # Done
 }
 
 if algo_name_test_type in test_type_dict.keys():
     test_type = test_type_dict[algo_name_test_type]
 else:
-    print("We do not have a test like this.")
+    print("We do not have a test like this. (1)")
     exit()
     
 WHITE = (255, 255, 255)
@@ -103,13 +103,6 @@ for k, v in pointsTestingDict.items():
     while running and total_runs < max_runs:
         screen.fill(GREY)
         shapes.clear()
-        # polygonPolygonRandom()
-        # circleLineRandom()
-        # lineLineRandom()
-        # aabbRandom()
-        # circleCircleRandom()
-        # circleLineNoOverlap()
-        # aabbNoOverlap()
 
         if test_type == "random":
             if algo_name_test_type in test_functions_random:
