@@ -54,7 +54,7 @@ Available grid-overlap tests:
 
 ## Instructions for Running the Program
 
-To run the benchmark, open main.py and modify the algo_name_test_type variable to select the desired test:
+To run the benchmark, open `main.py` and modify the algo_name_test_type variable to select the desired test:
 
 ```python
 # What would you like to test?
@@ -79,7 +79,7 @@ When you run the program, three folders are created automatically to store resul
 
 The repository already contains folders with benchmarking results that were used in our research paper. These folders include the CSV files for execution times and the corresponding visual outputs. They serve as a reference for transparency. We wanted others to be able to verify and analyze our benchmarking process. If you notice anything weird, please let us know. :)
 
-If you would like to generate your own results, simply modify the test parameters in main.py and shared_data.py, and run the program to create fresh benchmarking data.
+If you would like to generate your own results, modify the test parameters in `main.py` and `shared_data.py`, and run the program to create fresh benchmarking data.
 
 ---
 
